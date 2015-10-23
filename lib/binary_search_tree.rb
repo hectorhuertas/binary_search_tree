@@ -26,4 +26,9 @@ class BinarySearchTree
     head.minimum
   end
 
+  def depth_of(value)
+    return false if head.nil?
+    head.depth_of(value)
+  end
+
 end

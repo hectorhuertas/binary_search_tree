@@ -53,4 +53,20 @@ class Node
     max_array << right.maximum unless right.nil?
     max_array.max
   end
+
+  def depth_of(input_value)
+    if input_value == value
+      1
+    else
+      depth = 0
+      if !left.nil? && left.depth_of(input_value) > 0
+        depth += 1 + left.depth_of(input_value)
+      end
+      if !right.nil? && right.depth_of(input_value) > 0
+        depth += 1 + right.depth_of(input_value)
+      end
+      depth
+    end
+  end
+
 end
