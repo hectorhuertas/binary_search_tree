@@ -1,23 +1,24 @@
+require 'pry'
 class Node
-  attr_reader :value, :left, :right
+  attr_reader :value, :lesser_child, :greater_child
 
   def initialize(value)
     @value = value
   end
 
-  def insert(inserting_value)
-    if inserting_value < value
-      if left.nil?
-        @left=Node.new(inserting_value)
-      else
-        left.insert(inserting_value)
-      end
+  def insert_at(location, new_value)
+    if send(location).nil?
+      instance_variable_set(:"@#{location}", Node.new(new_value))
     else
-      if right.nil?
-        @right = Node.new(inserting_value)
-      else
-        right.insert(inserting_value)
-      end
+      send(location).insert(new_value)
+    end
+  end
+
+  def insert(new_value)
+    case new_value <=> value
+      when 0  then p 'Data already on tree'
+      when -1 then insert_at(:lesser_child, new_value)
+      when 1  then insert_at(:greater_child, new_value)
     end
   end
 
