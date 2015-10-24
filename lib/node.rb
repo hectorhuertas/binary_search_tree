@@ -1,56 +1,62 @@
+require 'pry'
 class Node
-  attr_reader :value, :left, :right
+  attr_reader :value, :lesser_child, :greater_child
 
   def initialize(value)
     @value = value
   end
 
-  def insert(inserting_value)
-    if inserting_value < value
-      if left.nil?
-        @left=Node.new(inserting_value)
-      else
-        left.insert(inserting_value)
-      end
+  def insert_at(location, new_value)
+    if send(location).nil?
+      instance_variable_set(:"@#{location}", Node.new(new_value))
     else
-      if right.nil?
-        @right = Node.new(inserting_value)
-      else
-        right.insert(inserting_value)
-      end
+      send(location).insert(new_value)
     end
   end
 
-  def include_on_side?(side,input_value)
-    if side.nil?
-      false
-    else
-      side.include?(input_value)
+  def insert(new_value)
+    case new_value <=> value
+    when 0  then p 'Data already on tree'
+    when -1 then insert_at(:lesser_child, new_value)
+    when 1  then insert_at(:greater_child, new_value)
     end
   end
 
-  def include?(input_value)
-    if input_value == value
+  def leave?
+    lesser_child.nil? && greater_child.nil?
+  end
+
+  def include_at?(location,sought_value)
+    # if location.nil?
+    #   false
+    # else
+      location && location.include?(sought_value)
+    # end
+  end
+
+  def include?(sought_value)
+    if sought_value == value
       true
-    elsif left.nil? && right.nil?
+    elsif leave?
       false
     else
-      include_on_side?(left,input_value) || include_on_side?(right,input_value)
+      include_at?(lesser_child,sought_value) ||
+       include_at?(greater_child,sought_value)
     end
   end
 
   def minimum
     min_array = [value]
-    min_array << left.minimum unless left.nil?
-    min_array << right.minimum unless right.nil?
+    min_array << lesser_child.minimum unless lesser_child.nil?
+    min_array << greater_child.minimum unless greater_child.nil?
     min_array.min
 
   end
 
   def maximum
     max_array = [value]
-    max_array << left.maximum unless left.nil?
-    max_array << right.maximum unless right.nil?
+    max_array << lesser_child.maximum unless lesser_child.nil?
+    max_array << greater_child.maximum unless greater_child.nil?
     max_array.max
   end
 
@@ -59,11 +65,11 @@ class Node
       1
     else
       depth = 0
-      if !left.nil? && left.depth_of(input_value) > 0
-        depth += 1 + left.depth_of(input_value)
+      if lesser_child && lesser_child.depth_of(input_value) > 0
+        depth += 1 + lesser_child.depth_of(input_value)
       end
-      if !right.nil? && right.depth_of(input_value) > 0
-        depth += 1 + right.depth_of(input_value)
+      if greater_child && greater_child.depth_of(input_value) > 0
+        depth += 1 + greater_child.depth_of(input_value)
       end
       depth
     end
@@ -72,14 +78,14 @@ class Node
   def max_depth
     # binding.pry
     max_depth = [0]
-    if left.nil? && right.nil?
+    if lesser_child.nil? && greater_child.nil?
       max_depth << 1
     end
-    if !left.nil?
-      max_depth << 1 + left.max_depth
+    if !lesser_child.nil?
+      max_depth << 1 + lesser_child.max_depth
     end
-    if !right.nil?
-      max_depth << 1 + right.max_depth
+    if !greater_child.nil?
+      max_depth << 1 + greater_child.max_depth
     end
     max_depth.max
   end
@@ -106,11 +112,11 @@ class Node
     # binding.pry
     left_values = []
     right_values = []
-    if !left.nil?
-      left_values=left.my_sort
+    if !lesser_child.nil?
+      left_values=lesser_child.my_sort
     end
-    if !right.nil?
-      right_values=right.my_sort
+    if !greater_child.nil?
+      right_values=greater_child.my_sort
     end
     left_values = merge_arrays(left_values,[self.value])
     sorted_values = merge_arrays(left_values,right_values)
@@ -118,18 +124,38 @@ class Node
 
   def leaves_count
 
-    if left.nil? && right.nil?
+    if lesser_child.nil? && greater_child.nil?
       1
     else
       total=0
-      if !left.nil?
-        total+= left.leaves_count
+      if !lesser_child.nil?
+        total+= lesser_child.leaves_count
       end
-      if !right.nil?
-        total += right.leaves_count
+      if !greater_child.nil?
+        total += greater_child.leaves_count
       end
       total
     end
   end
 
+end
+
+class NilClassNode
+  def self.bob
+    'nil'
+  end
+end
+
+class NodeNode
+  def self.bob
+    'node'
+  end
+end
+
+class Manager
+  def bob
+    # Object.const_get("NodeNode").bob
+    NodeNode.bob
+
+  end
 end
