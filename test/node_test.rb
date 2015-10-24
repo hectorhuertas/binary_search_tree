@@ -23,28 +23,26 @@ class NodeTest < Minitest::Test
   def test_it_inserts_one_value
     node = Node.new(5)
     node.insert(4)
-    assert_equal 4,node.lesser_child.value
+    assert_equal 4, node.lesser_child.value
   end
 
   def test_it_inserts_lesser_values_on_lesser_child
     node = Node.new(5)
     node.insert(4)
-    assert_equal 4,node.lesser_child.value
+    assert_equal 4, node.lesser_child.value
     refute node.greater_child
   end
 
   def test_it_inserts_greater_values_on_greater_child
     node = Node.new(5)
     node.insert(7)
-    assert_equal 7,node.greater_child.value
+    assert_equal 7, node.greater_child.value
     refute node.lesser_child
   end
 
   def test_it_inserts_several_values_in_correct_positions
     node = Node.new(5)
-    node.insert(7)
-    node.insert(6)
-    node.insert(9)
+    [7, 6, 9].each { |element| node.insert(element) }
     assert_equal 7, node.greater_child.value
     assert_equal 6, node.greater_child.lesser_child.value
     assert_equal 9, node.greater_child.greater_child.value
@@ -53,6 +51,65 @@ class NodeTest < Minitest::Test
   def test_it_doesnt_allow_duplicates
     node = Node.new(5)
     assert_equal 'Data already on tree', node.insert(5)
+  end
+
+  def test_include_finds_existing_values
+    node = Node.new(15)
+    set = [3, 5, 7, 11, 13,15, 17]
+    set.shuffle.each { |element| node.insert(element) }
+    set.shuffle.each { |element| assert node.include?(element) }
+  end
+
+  def test_include_does_not_find_unexisting_values
+    node = Node.new(15)
+    existing = [3, 5, 7, 11, 13,15, 17]
+    unexisting = [1,4,6,12,99,'z',Node.new(7)]
+    existing.shuffle.each { |element| node.insert(element) }
+    unexisting.shuffle.each { |element| refute node.include?(element) }
+  end
+
+  def test_depth_of_returns_correct_value
+    node = Node.new(5)
+    input = [1,9,7,10,6]
+    set = [5,1,9,7,10,6]
+    depths = [1,2,2,3,3,4]
+    input.each { |element| node.insert(element) }
+    assert_equal depths, set.map { |element| node.depth_of(element) }
+  end
+
+  def test_maximum_returns_greater_value
+    node = Node.new(5)
+    input = [1..200].sample(50) + [999]
+    input.shuffle.each { |element| node.insert(element) }
+    assert_equal 999, node.maximum
+  end
+
+  def test_minimum_returns_lesser_value
+    node = Node.new(5)
+    input = [1..200].sample(50) + [0]
+    input.shuffle.each { |element| node.insert(element) }
+    assert_equal 0, node.minimum
+  end
+
+  def test_max_depth_returns_heigth_of_tree
+    node = Node.new(5)
+    input = [1,9,7,10,6]
+    input.each { |element| node.insert(element) }
+    assert_equal 4, node.max_depth
+  end
+
+  def test_sort_returns_sorted_array_of_values
+    node = Node.new(15)
+    input = [3, 5, 7, 11, 13,15, 17]
+    input.shuffle.each { |element| node.insert(element) }
+    assert_equal input, node.my_sort
+  end
+
+  def test_leaves_count_returns_number_of_leaves
+    node = Node.new(5)
+    input = [1,9,7,10,6]
+    input.each { |element| node.insert(element) }
+    assert_equal 3, node.leaves_count
   end
 
 end
