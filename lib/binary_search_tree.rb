@@ -36,4 +36,14 @@ class BinarySearchTree
     head.max_depth
   end
 
+  def my_sort
+    return false if head.nil?
+    head.my_sort
+  end
+
+  def leaves_count
+    return false if head.nil?
+    head.leaves_count
+  end
+
 end

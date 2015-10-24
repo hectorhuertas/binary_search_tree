@@ -82,12 +82,54 @@ class Node
       max_depth << 1 + right.max_depth
     end
     max_depth.max
-    # else
-    #   depth
-    #   depth += left.max_depth unless left.nil?
-    #   depth += right.max.depth unless right.nil?
-    #   depth
-    #   end
+  end
+
+  def merge_arrays(left_values,right_values)
+    # binding.pry
+    sorted_values = []
+    while !left_values.empty? && !right_values.empty?
+      if left_values[0]<right_values[0]
+        sorted_values<<left_values.shift
+      else
+        sorted_values<<left_values.shift
+      end
+    end
+    if left_values.empty?
+      sorted_values += right_values
+    else
+      sorted_values += left_values
+    end
+    sorted_values
+  end
+
+  def my_sort
+    # binding.pry
+    left_values = []
+    right_values = []
+    if !left.nil?
+      left_values=left.my_sort
+    end
+    if !right.nil?
+      right_values=right.my_sort
+    end
+    left_values = merge_arrays(left_values,[self.value])
+    sorted_values = merge_arrays(left_values,right_values)
+  end
+
+  def leaves_count
+
+    if left.nil? && right.nil?
+      1
+    else
+      total=0
+      if !left.nil?
+        total+= left.leaves_count
+      end
+      if !right.nil?
+        total += right.leaves_count
+      end
+      total
+    end
   end
 
 end
