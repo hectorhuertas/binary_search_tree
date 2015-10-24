@@ -69,4 +69,25 @@ class Node
     end
   end
 
+  def max_depth
+    # binding.pry
+    max_depth = [0]
+    if left.nil? && right.nil?
+      max_depth << 1
+    end
+    if !left.nil?
+      max_depth << 1 + left.max_depth
+    end
+    if !right.nil?
+      max_depth << 1 + right.max_depth
+    end
+    max_depth.max
+    # else
+    #   depth
+    #   depth += left.max_depth unless left.nil?
+    #   depth += right.max.depth unless right.nil?
+    #   depth
+    #   end
+  end
+
 end

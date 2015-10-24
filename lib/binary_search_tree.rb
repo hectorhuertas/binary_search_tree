@@ -31,4 +31,9 @@ class BinarySearchTree
     head.depth_of(value)
   end
 
+  def max_depth
+    return false if head.nil?
+    head.max_depth
+  end
+
 end
