@@ -1,5 +1,6 @@
 require_relative 'node'
 require_relative 'file_io'
+
 class BinarySearchTree
   attr_reader :head, :file_io
 
@@ -35,9 +36,9 @@ class BinarySearchTree
     head.depth_of(value)
   end
 
-  def max_depth
+  def height
     return false if head.nil?
-    head.max_depth
+    head.height
   end
 
   def sort
@@ -51,8 +52,14 @@ class BinarySearchTree
   end
 
   def sort_file
-    file_io.read.split.each{|element|insert(element)}
-    file_io.write(sort.join("\n"))
+    input = file_io.read
+    output = sort_data(input)
+    file_io.write(output)
+  end
+
+  def sort_file_data(input)
+    input.split.each{|element|insert(element)}
+    sort.join("\n")
   end
 
 end
