@@ -75,4 +75,41 @@ class Node
       childs.reduce(0) { |sum, child| sum + child.leaves_count }
     end
   end
+
+  def delete_child(location)
+    reinserting_values = send(location).sort - [send(location).value]
+    instance_variable_set(:"@#{location}", nil)
+    reinserting_values.shuffle.each{|value|insert(value)}
+    # reinserting_values = aim_child.sort - [aim_child.value]
+    # instance_variable_set(:"@#{location}", nil)
+    # reinserting_values.shuffle.each{|value|insert(value)}
+  end
+
+  def delete(input_value)
+    # aim_child=childs.find{|child|child.include?(input_value)}
+    # p greater_child.value
+    # p'b'
+    if greater_child && greater_child.value==input_value
+      delete_child(:greater_child)
+      # x = aim_child.sort - [aim_child.value]
+      # if aim_child == greater_child
+      #   @greater_child=nil
+      #   x.each{|value|insert(value)}
+      # else
+      #   @lesser_child=nil
+      #   x.each{|value|insert(value)}
+      # end
+    elsif lesser_child && lesser_child.value==input_value
+      delete_child(:lesser_child)
+    else
+      childs.find{|child|child.include?(input_value)}.delete(input_value)
+      # aim_child.delete(input_value)
+    end
+
+
+  end
+
+  def count
+    childs.reduce(1){|sum,child| sum + child.count}
+  end
 end
