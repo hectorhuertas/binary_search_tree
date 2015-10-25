@@ -1,5 +1,6 @@
 require 'minitest'
 require 'node'
+require 'sorter'
 
 class NodeTest < Minitest::Test
   def test_it_exists
@@ -91,18 +92,18 @@ class NodeTest < Minitest::Test
     assert_equal 99, node.minimum
   end
 
-  def test_max_depth_returns_heigth_of_tree
+  def test_height_returns_heigth_of_tree
     node = Node.new(5)
     input = [1, 9, 7, 10, 6]
     input.each { |element| node.insert(element) }
-    assert_equal 4, node.max_depth
+    assert_equal 4, node.height
   end
 
   def test_sort_returns_sorted_array_of_values
     node = Node.new(15)
     input = [3, 5, 7, 11, 13, 15, 17]
     input.shuffle.each { |element| node.insert(element) }
-    assert_equal input, node.my_sort
+    assert_equal input, node.sort
   end
 
   def test_leaves_count_returns_number_of_leaves
@@ -111,4 +112,7 @@ class NodeTest < Minitest::Test
     input.each { |element| node.insert(element) }
     assert_equal 3, node.leaves_count
   end
+
+# test childs
+# test leaf
 end

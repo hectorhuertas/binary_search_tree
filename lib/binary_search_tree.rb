@@ -6,7 +6,6 @@ class BinarySearchTree
     if head.nil?
       @head = Node.new(value)
     else
-      #check uniqueness
       head.insert(value)
     end
   end
