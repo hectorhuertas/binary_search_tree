@@ -6,7 +6,7 @@ class FileIO
 
   def write(content)
     filename = ARGV[1]
-    f = File.open(filename,'w')
+    f = File.open(filename, 'w')
     f.write(content)
     f.close
   end

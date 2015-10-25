@@ -53,13 +53,12 @@ class BinarySearchTree
 
   def sort_file
     input = file_io.read
-    output = sort_data(input)
+    output = sort_file_data(input)
     file_io.write(output)
   end
 
   def sort_file_data(input)
-    input.split.each{|element|insert(element)}
+    input.split.each { |element| insert(element) }
     sort.join("\n")
   end
-
 end
