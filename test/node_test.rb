@@ -1,6 +1,5 @@
 require 'minitest'
 require 'node'
-require 'sorter'
 
 class NodeTest < Minitest::Test
   def test_it_exists
@@ -97,6 +96,11 @@ class NodeTest < Minitest::Test
     input = [1, 9, 7, 10, 6]
     input.each { |element| node.insert(element) }
     assert_equal 4, node.height
+  end
+
+  def it_sorts_single_elements
+    node = Node.new(15)
+    assert_equal 15, node.sort
   end
 
   def test_sort_returns_sorted_array_of_values

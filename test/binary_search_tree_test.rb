@@ -56,76 +56,38 @@ class BinarySearchTreeTest < Minitest::Test
     refute binary_search_tree.leaves_count
   end
 
-  # def test_it_sends_insert_to_head
-  #   binary_search_tree = BinarySearchTree.new
-  #   binary_search_tree.insert(5)
-  #   expected=binary_search_tree.head.insert(9)
-  #   binary_search_tree = BinarySearchTree.new
-  #   binary_search_tree.insert(5)
-  #   actual=binary_search_tree.insert(9)
-  #   assert_equal expected, actual
-  # end
-  #
-  # # def test_it_sends_include_to_head
-  # #   binary_search_tree = BinarySearchTree.new
-  # #   binary_search_tree.insert(5)
-  # #   expected=binary_search_tree.head.method
-  # #   actual=binary_search_tree.method
-  # #   assert_equal expected, actual
-  # # end
-  # #
-  # # def test_it_sends_maximum_to_head
-  # #   binary_search_tree = BinarySearchTree.new
-  # #   binary_search_tree.insert(5)
-  # #   expected=binary_search_tree.head.method
-  # #   actual=binary_search_tree.method
-  # #   assert_equal expected, actual
-  # # end
-  # #
-  # # def test_it_sends_minimum_to_head
-  # #   binary_search_tree = BinarySearchTree.new
-  # #   binary_search_tree.insert(5)
-  # #   expected=binary_search_tree.head.method
-  # #   actual=binary_search_tree.method
-  # #   assert_equal expected, actual
-  # # end
-  # #
-  # # def test_it_sends_depth_of_to_head
-  # #   binary_search_tree = BinarySearchTree.new
-  # #   binary_search_tree.insert(5)
-  # #   expected=binary_search_tree.head.method
-  # #   actual=binary_search_tree.method
-  # #   assert_equal expected, actual
-  # # end
-  # #
-  # # def test_it_sends_height_to_head
-  # #   binary_search_tree = BinarySearchTree.new
-  # #   binary_search_tree.insert(5)
-  # #   expected=binary_search_tree.head.method
-  # #   actual=binary_search_tree.method
-  # #   assert_equal expected, actual
-  # # end
-  # #
-  # # def test_it_sends_sort_to_head
-  # #   binary_search_tree = BinarySearchTree.new
-  # #   binary_search_tree.insert(5)
-  # #   expected=binary_search_tree.head.method
-  # #   actual=binary_search_tree.method
-  # #   assert_equal expected, actual
-  # # end
-  # #
-  # # def test_it_sends_leaves_count_to_head
-  # #   binary_search_tree = BinarySearchTree.new
-  # #   binary_search_tree.insert(5)
-  # #   expected=binary_search_tree.head.method
-  # #   actual=binary_search_tree.method
-  # #   assert_equal expected, actual
-  # # end
+  def test_it_handles_delete_when_empty_tree
+    binary_search_tree = BinarySearchTree.new
+    refute binary_search_tree.delete(6)
+  end
+
+  def test_it_handles_count_when_empty_tree
+    binary_search_tree = BinarySearchTree.new
+    assert_equal 0, binary_search_tree.count
+  end
 
   def test_it_sorts_data_from_a_to_file
     binary_search_tree = BinarySearchTree.new
     input = "5\n1\n8\n4\n9\n"
     expected = "1\n4\n5\n8\n9"
     assert_equal expected, binary_search_tree.sort_file_data(input)
+  end
+
+  def test_it_deletes_head
+    binary_search_tree = BinarySearchTree.new
+    binary_search_tree.insert(50)
+    input = (0..100).to_a
+    input.shuffle.each { |element| binary_search_tree.insert(element) }
+    binary_search_tree.delete(50)
+    refute binary_search_tree.include?(50)
+  end
+
+  def test_delete_keeps_every_other_element
+    binary_search_tree = BinarySearchTree.new
+    binary_search_tree.insert(50)
+    input = (0..100).to_a
+    input.shuffle.each { |element| binary_search_tree.insert(element) }
+    binary_search_tree.delete(50)
+    assert_equal 100, binary_search_tree.count
   end
 end
