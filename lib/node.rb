@@ -1,5 +1,3 @@
-require_relative 'sorter'
-
 class Node
   attr_reader :value, :lesser_child, :greater_child
 
@@ -64,8 +62,9 @@ class Node
   end
 
   def sort
-    values = childs.reduce([value]) { |sum, child| sum + child.sort }
-    Sorter.new.sort(values)
+    return [value] if leaf?
+    values = [lesser_child, greater_child].map { |child| child ? child.sort : [] }
+    values [0] + [value] + values[1]
   end
 
   def leaves_count
@@ -74,5 +73,25 @@ class Node
     else
       childs.reduce(0) { |sum, child| sum + child.leaves_count }
     end
+  end
+
+  def delete_child(location)
+    reinserting_values = send(location).sort - [send(location).value]
+    instance_variable_set(:"@#{location}", nil)
+    reinserting_values.shuffle.each { |value| insert(value) }
+  end
+
+  def delete(input_value)
+    if greater_child && greater_child.value == input_value
+      delete_child(:greater_child)
+    elsif lesser_child && lesser_child.value == input_value
+      delete_child(:lesser_child)
+    else
+      childs.find { |child| child.include?(input_value) }.delete(input_value)
+    end
+  end
+
+  def count
+    childs.reduce(1) { |sum, child| sum + child.count }
   end
 end

@@ -1,6 +1,5 @@
 require 'minitest'
 require 'node'
-require 'sorter'
 
 class NodeTest < Minitest::Test
   def test_it_exists
@@ -99,6 +98,11 @@ class NodeTest < Minitest::Test
     assert_equal 4, node.height
   end
 
+  def it_sorts_single_elements
+    node = Node.new(15)
+    assert_equal 15, node.sort
+  end
+
   def test_sort_returns_sorted_array_of_values
     node = Node.new(15)
     input = [3, 5, 7, 11, 13, 15, 17]
@@ -153,5 +157,42 @@ class NodeTest < Minitest::Test
     refute node.leaf?
     refute node.greater_child.leaf?
     refute node.greater_child.lesser_child.leaf?
+  end
+
+  def test_it_counts_elements
+    node = Node.new(25)
+    input = (1..50).to_a
+    input.each { |element| node.insert(element) }
+    assert_equal 50, node.count
+  end
+
+  def test_deletes_greater_child_leave
+    node = Node.new(5)
+    node.insert(7)
+    node.delete(7)
+    refute node.greater_child
+  end
+
+  def test_deletes_lesser_child_leave
+    node = Node.new(5)
+    node.insert(2)
+    node.delete(2)
+    refute node.lesser_child
+  end
+
+  def test_delete_removes_node
+    node = Node.new(100)
+    input = (0..200).to_a.sample(50) + [130]
+    input.shuffle.each { |element| node.insert(element) }
+    node.delete(130)
+    refute node.include?(130)
+  end
+
+  def test_delete_keeps_every_other_element
+    node = Node.new(50)
+    input = (0..100).to_a
+    input.shuffle.each { |element| node.insert(element) }
+    node.delete(70)
+    assert_equal 100, node.count
   end
 end
