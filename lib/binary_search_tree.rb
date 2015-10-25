@@ -1,6 +1,11 @@
 require_relative 'node'
+require_relative 'file_io'
 class BinarySearchTree
-  attr_reader :head
+  attr_reader :head, :file_io
+
+  def initialize
+    @file_io = FileIO.new
+  end
 
   def insert(value)
     if head.nil?
@@ -35,14 +40,19 @@ class BinarySearchTree
     head.max_depth
   end
 
-  def my_sort
+  def sort
     return false if head.nil?
-    head.my_sort
+    head.sort
   end
 
   def leaves_count
     return false if head.nil?
     head.leaves_count
+  end
+
+  def sort_file
+    file_io.read.split.each{|element|insert(element)}
+    file_io.write(sort.join("\n"))
   end
 
 end

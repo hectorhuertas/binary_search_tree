@@ -1,4 +1,4 @@
-require 'sorter'
+require_relative 'sorter'
 
 class Node
   attr_reader :value, :lesser_child, :greater_child

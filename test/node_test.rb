@@ -113,6 +113,45 @@ class NodeTest < Minitest::Test
     assert_equal 3, node.leaves_count
   end
 
-# test childs
-# test leaf
+  def test_childs_return_empty_array_for_leaves
+    node = Node.new(5)
+    input = [1, 9, 7, 10, 6]
+    input.each { |element| node.insert(element) }
+    assert_equal [], node.lesser_child.childs
+    assert_equal [], node.greater_child.greater_child.childs
+    assert_equal [], node.greater_child.lesser_child.lesser_child.childs
+  end
+
+  def test_childs_return_only_one_child
+    node = Node.new(5)
+    input = [1, 9, 7, 10, 6]
+    input.each { |element| node.insert(element) }
+    assert_equal 1, node.greater_child.lesser_child.childs.length
+  end
+
+  def test_childs_return_both_childs
+    node = Node.new(5)
+    input = [1, 9, 7, 10, 6]
+    input.each { |element| node.insert(element) }
+    assert_equal 2, node.childs.length
+    assert_equal 2, node.greater_child.childs.length
+  end
+
+  def test_leaf_returns_true_for_leaves
+    node = Node.new(5)
+    input = [1, 9, 7, 10, 6]
+    input.each { |element| node.insert(element) }
+    assert node.lesser_child.leaf?
+    assert node.greater_child.greater_child.leaf?
+    assert node.greater_child.lesser_child.lesser_child.leaf?
+  end
+
+  def test_leaf_returns_false_for_leaves
+    node = Node.new(5)
+    input = [1, 9, 7, 10, 6]
+    input.each { |element| node.insert(element) }
+    refute node.leaf?
+    refute node.greater_child.leaf?
+    refute node.greater_child.lesser_child.leaf?
+  end
 end
